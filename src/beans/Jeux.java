@@ -29,7 +29,7 @@ public class Jeux implements Serializable, Comparable<Jeux>{
 		this.type_console = type_console;
 		this.tarif = tarif;
 		this.nombre_libre = nombre_libre;
-		this.nombre_libre = id_createur;
+		this.id_createur = id_createur;
 		this.description_jeux = description_jeux;
 		this.type_livraison = type_livraison;
 		this.a_vendre = a_vendre;
@@ -37,20 +37,78 @@ public class Jeux implements Serializable, Comparable<Jeux>{
 		
 	}
 	
-	/*public int getId_jeux() {
+	public int getId_jeux() {
 		return id_jeux;
 	}
 	public void setId_jeux(int id_jeux) {
 		this.id_jeux = id_jeux;
 	}
 	
-	public String getUsername() {
-		return username;
+	public String getTitre() {
+		return titre;
 	}
-	public void setUsername(String username) {
-		this.username = username;
+	public void setTitre(String titre) {
+		this.titre = titre;
 	}
-	*/
+	
+	public String getPhoto_jeux() {
+		return photo_jeux;
+	}
+	public void setPhoto_jeux(String photo_jeux) {
+		this.photo_jeux = photo_jeux;
+	}
+	
+	public String getType_console() {
+		return type_console;
+	}
+	public void setType_console(String type_console) {
+		this.type_console = type_console;
+	}
+	
+	public float getTarif() {
+		return tarif;
+	}
+	public void setTarif(float tarif) {
+		this.tarif = tarif;
+	}
+	
+	public int getNombre_libre() {
+		return nombre_libre;
+	}
+	public void setNombre_libre(int nombre_libre) {
+		this.nombre_libre = nombre_libre;
+	}
+	
+	public int getid_createur() {
+		return id_createur;
+	}
+	public void setid_createur(int id_createur) {
+		this.id_createur = id_createur;
+	}
+	
+	public String getType_livraison() {
+		return type_console;
+	}
+	public void setType_livraison(String type_livraison) {
+		this.type_livraison = type_livraison;
+	}
+	
+	public boolean getA_vendre() {
+		return a_vendre;
+	}
+	public void setA_vendre(boolean a_vendre) {
+		this.a_vendre = a_vendre;
+	}
+	
+	public Date getDate_publication() {
+		return date_publication;
+	}
+	public void setDate_publication(Date date_publication) {
+		this.date_publication = date_publication;
+	}
+	
+	
+	
 	
 	@Override
 	public int compareTo(Jeux o) {

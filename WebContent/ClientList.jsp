@@ -80,7 +80,7 @@ Tri :
 		<br />
 		
 		<label for="Date naissance">Date naissance :</label>
-		<input type="text" name="date_naissance" id="date_naissance1" value="${uModif.date_naissance}"/>
+		<input type="Date" name="date_naissance" id="date_naissance1" value="${uModif.date_naissance}"/>
 		<br />
 		<input type="hidden" name="id_client" value="${uModif.id_client}"/>
 		<input type="submit" value="Valider" />

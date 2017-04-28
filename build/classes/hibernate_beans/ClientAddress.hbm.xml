@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2017-4-28 5:44:07 by Hibernate Tools 5.2.1.Final -->
+<hibernate-mapping>
+    <class name="hibernate_beans.ClientAddress" table="client_address" optimistic-lock="version">
+        <composite-id name="id" class="hibernate_beans.ClientAddressId">
+            <key-property name="idAddress" type="int">
+                <column name="id_address" />
+            </key-property>
+            <key-property name="idClient" type="int">
+                <column name="id_client" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="client" class="hibernate_beans.Client" update="false" insert="false" fetch="select">
+            <column name="id_client" not-null="true" />
+        </many-to-one>
+        <property name="recepteur" type="string">
+            <column name="recepteur" length="50" not-null="true" />
+        </property>
+        <property name="address" type="string">
+            <column name="address" not-null="true" />
+        </property>
+        <property name="codePostal" type="string">
+            <column name="code_postal" length="50" not-null="true" />
+        </property>
+        <property name="ville" type="string">
+            <column name="ville" length="50" not-null="true" />
+        </property>
+        <property name="pays" type="string">
+            <column name="pays" length="50" not-null="true" />
+        </property>
+        <property name="telephone" type="string">
+            <column name="telephone" length="100" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

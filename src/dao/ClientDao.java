@@ -70,17 +70,20 @@ public class ClientDao {
 			cnx = ConnexionBDD.getInstance().getCnx();
 			
 			//Requete
-			String sql = "INSERT INTO Client(username,password,nom,prenom,gender,date_naissance) " +
+			String sql = "INSERT INTO client(username,password,nom,prenom,gender,date_naissance) " +
 					"VALUES(?,?,?,?,?,?)";
 			PreparedStatement ps = cnx.prepareStatement(sql);
 			ps.setString(1, u.getUsername());
 			ps.setString(2, u.getPassword());
 			ps.setString(3, u.getNom());
 			ps.setString(4, u.getPrenom());
-			ps.setString(5, u.getGender());			
-			ps.setDate(6, new java.sql.Date(u.getDate_naissance().getTime()));
+			ps.setString(5, u.getGender());
+			if(u.getDate_naissance()==null){
+				ps.setDate(6, null);}
+			else{
+				ps.setDate(6, new java.sql.Date(u.getDate_naissance().getTime()));}
 			
-			//Execution et traitement de la r¨¦ponse
+			//Execution et traitement de la rï¿½ï¿½ponse
 			res = ps.executeUpdate();
 			
 			ConnexionBDD.getInstance().closeCnx();			
@@ -101,7 +104,7 @@ public class ClientDao {
 			cnx = ConnexionBDD.getInstance().getCnx();
 			
 			//Requete
-			String sql = "UPDATE Client SET password=?,nom=?,prenom=?,gender=?,date_naissance=? WHERE id_client=?";
+			String sql = "UPDATE client SET password=?,nom=?,prenom=?,gender=?,date_naissance=? WHERE id_client=?";
 			PreparedStatement ps = cnx.prepareStatement(sql);
 			ps.setString(1, u.getPassword());
 			ps.setString(2, u.getNom());
@@ -110,7 +113,7 @@ public class ClientDao {
 			ps.setDate(5, new java.sql.Date(u.getDate_naissance().getTime()));
 			ps.setInt(6, u.getId_client());
 			
-			//Execution et traitement de la r¨¦ponse
+			//Execution et traitement de la rï¿½ï¿½ponse
 			res = ps.executeUpdate();
 			
 			ConnexionBDD.getInstance().closeCnx();			
@@ -130,11 +133,11 @@ public class ClientDao {
 
 				
 			//Requete
-			String sql = "DELETE FROM Client WHERE id_client=?";
+			String sql = "DELETE FROM client WHERE id_client=?";
 			PreparedStatement ps = cnx.prepareStatement(sql);
 			ps.setInt(1,id);
 			
-			//Execution et traitement de la r¨¦ponse
+			//Execution et traitement de la rï¿½ï¿½ponse
 			res = ps.executeUpdate();
 			
 			ConnexionBDD.getInstance().closeCnx();			
@@ -167,7 +170,7 @@ public class ClientDao {
 			ps.setInt(1, id);
 			
 			
-			//Execution et traitement de la r¨¦ponse
+			//Execution et traitement de la rï¿½ï¿½ponse
 			ResultSet res = ps.executeQuery();
 			
 			while(res.next()){
@@ -215,7 +218,7 @@ public class ClientDao {
 			ps.setInt(2, nbElts);
 			
 			
-			//Execution et traitement de la r¨¦ponse
+			//Execution et traitement de la rï¿½ï¿½ponse
 			ResultSet res = ps.executeQuery();
 			
 			while(res.next()){
@@ -249,15 +252,15 @@ public class ClientDao {
 
 		
 			//Requete
-			String sql = "SELECT * FROM client WHERE username=?, password=?; ";
+			String sql = "SELECT * FROM client WHERE username=? and password=?; ";
 			PreparedStatement ps = cnx.prepareStatement(sql);
 			ps.setString(1, u.getUsername());
 			ps.setString(2, u.getPassword());
 			
-			//Execution et traitement de la r¨¦ponse
+			//Execution et traitement de la rï¿½ï¿½ponse
 			ResultSet res = ps.executeQuery();
 			
-			if (!res.next()){
+			if (res.next()){ /*res.getRow() == 1*/
 				u.setId_client(res.getInt("id_client"));
 			}
 			else{

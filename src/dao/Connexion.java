@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import beans.Client;
-import com.szdee.forms.ConnexionForm;
+import controllers.ConnexionForm;
 import dao.ClientDao;
 
 /**

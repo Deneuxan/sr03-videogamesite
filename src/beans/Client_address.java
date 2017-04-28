@@ -22,7 +22,7 @@ public class Client_address implements Serializable, Comparable<Client_address>{
 	public Client_address(int id_client, int id_address, String recepteur, String address, String code_postal, String ville, String pays, String telephone) {
 		super();
 		this.id_client = id_client;
-		this.id_client = id_address;
+		this.id_address = id_address;
 		this.recepteur = recepteur;
 		this.address = address;
 		this.code_postal = code_postal;

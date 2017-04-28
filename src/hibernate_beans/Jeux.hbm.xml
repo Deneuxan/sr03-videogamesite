@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2017-4-28 5:44:07 by Hibernate Tools 5.2.1.Final -->
+<hibernate-mapping>
+    <class name="hibernate_beans.Jeux" table="jeux" optimistic-lock="version">
+        <id name="idJeux" type="int">
+            <column name="id_jeux" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="createur" class="hibernate_beans.Createur" fetch="select">
+            <column name="id_createur" />
+        </many-to-one>
+        <property name="titre" type="string">
+            <column name="titre" length="50" not-null="true" />
+        </property>
+        <property name="photoJeux" type="string">
+            <column name="photo_jeux" />
+        </property>
+        <property name="typeConsole" type="string">
+            <column name="type_console" length="4" not-null="true" />
+        </property>
+        <property name="tarif" type="float">
+            <column name="tarif" precision="12" scale="0" not-null="true" />
+        </property>
+        <property name="nombreLibre" type="int">
+            <column name="nombre_libre" not-null="true" />
+        </property>
+        <property name="descriptionJeux" type="string">
+            <column name="description_jeux" length="1000" not-null="true" />
+        </property>
+        <property name="typeLivraison" type="string">
+            <column name="type_livraison" length="9" not-null="true" />
+        </property>
+        <property name="AVendre" type="java.lang.Boolean">
+            <column name="a_vendre" />
+        </property>
+        <property name="datePublication" type="timestamp">
+            <column name="date_publication" length="19" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

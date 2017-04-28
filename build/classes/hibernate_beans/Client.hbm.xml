@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2017-4-28 5:44:07 by Hibernate Tools 5.2.1.Final -->
+<hibernate-mapping>
+    <class name="hibernate_beans.Client" table="client" optimistic-lock="version">
+        <id name="idClient" type="int">
+            <column name="id_client" />
+            <generator class="assigned" />
+        </id>
+        <property name="username" type="string">
+            <column name="username" length="100" not-null="true" unique="true" />
+        </property>
+        <property name="password" type="string">
+            <column name="password" length="100" not-null="true" />
+        </property>
+        <property name="nom" type="string">
+            <column name="nom" length="100" />
+        </property>
+        <property name="prenom" type="string">
+            <column name="prenom" length="100" />
+        </property>
+        <property name="gender" type="string">
+            <column name="gender" length="2" />
+        </property>
+        <property name="dateNaissance" type="date">
+            <column name="date_naissance" length="10" />
+        </property>
+        <set name="clientAddresses" table="client_address" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_client" not-null="true" />
+            </key>
+            <one-to-many class="hibernate_beans.ClientAddress" />
+        </set>
+    </class>
+</hibernate-mapping>
