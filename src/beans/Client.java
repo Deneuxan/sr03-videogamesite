@@ -3,6 +3,12 @@ package beans;
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Client implements Serializable, Comparable<Client> {
 	
@@ -90,5 +96,32 @@ public class Client implements Serializable, Comparable<Client> {
 		return this.username.compareTo(o.username);
 	}
 	
-
+	
+	public String ToJSON()
+	{
+		String jsonInString = "";
+		ObjectMapper mapper = new ObjectMapper();
+		//Object to JSON in String
+		try {
+			jsonInString = mapper.writeValueAsString(this);
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return jsonInString;
+	}
+	
+	static public String ToJSONall(List<Client> list){
+		String jsonInString = "";
+		ObjectMapper mapper = new ObjectMapper();
+		//Object to JSON in String
+		try {
+			jsonInString = mapper.writeValueAsString(list);
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return jsonInString;
+		
+	}
 }

@@ -12,6 +12,7 @@ public class Commande implements Serializable, Comparable<Commande>{
 	private Date date_valide;
 	private float somme_argent;
 	private int id_address;
+	private String address;
 	
 	
 	public int getId_client() {
@@ -50,6 +51,12 @@ public class Commande implements Serializable, Comparable<Commande>{
 		this.id_address = id_address;
 	}
 	
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
 	
 	
 	@Override

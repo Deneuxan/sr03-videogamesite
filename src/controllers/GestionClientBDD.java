@@ -179,7 +179,7 @@ public static List<Commande> findAllCommande(int id) {
 			// ou Class.forName(com.mysql.jdbc.Driver.class.getName());
 			
 			//Requete
-			String sql = "select id_commande,date_valide,somme_argent,address,code_postal,ville,pays from commande,client_address where client_address.id_address=commande.id_address and id_client=？;";
+			String sql = "select id_commande,date_valide,somme_argent,address,code_postal,ville,pays from commande,client_address where client_address.id_address=commande.id_address and id_client=?;";
 			PreparedStatement ps = cnx.prepareStatement(sql);
 			
 			//Execution et traitement de la réponse
