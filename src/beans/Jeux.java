@@ -2,6 +2,11 @@ package beans;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 public class Jeux implements Serializable, Comparable<Jeux>{
 
@@ -86,8 +91,15 @@ public class Jeux implements Serializable, Comparable<Jeux>{
 		this.id_createur = id_createur;
 	}
 	
+	public String getDescription_jeux() {
+		return description_jeux;
+	}
+	public void setDescription_jeux(String description_jeux) {
+		this.description_jeux = description_jeux;
+	}
+	
 	public String getType_livraison() {
-		return type_console;
+		return type_livraison;
 	}
 	public void setType_livraison(String type_livraison) {
 		this.type_livraison = type_livraison;
@@ -107,7 +119,33 @@ public class Jeux implements Serializable, Comparable<Jeux>{
 		this.date_publication = date_publication;
 	}
 	
+	public String ToJSON()
+	{
+		String jsonInString = "";
+		ObjectMapper mapper = new ObjectMapper();
+		//Object to JSON in String
+		try {
+			jsonInString = mapper.writeValueAsString(this);
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return jsonInString;
+	}
 	
+	static public String ToJSONall(List<Jeux> list){
+		String jsonInString = "";
+		ObjectMapper mapper = new ObjectMapper();
+		//Object to JSON in String
+		try {
+			jsonInString = mapper.writeValueAsString(list);
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return jsonInString;
+		
+	}
 	
 	
 	@Override

@@ -165,7 +165,7 @@ public class ClientDao {
 
 		
 			//Requete
-			String sql = "SELECT id_client,username,password,nom,prenom,gender,date_naissance FROM client WHERE id_client=?";
+			String sql = "SELECT id_client,username,password,nom,prenom,gender,date_naissance FROM client WHERE id_client=?;";
 			PreparedStatement ps = cnx.prepareStatement(sql);
 			ps.setInt(1, id);
 			
@@ -195,6 +195,57 @@ public class ClientDao {
 
 		return u;
 	}
+	
+	
+	public static Client find(String username) {
+		/*
+		 * List<beans.Client> lu = new ArrayList<Client>(); lu.add(new
+		 * Client(1,"nom1","tel1","username1","pwd1")); lu.add(new
+		 * Client(2,"nom2","tel2","username2","pwd2")); lu.add(new
+		 * Client(3,"nom3","tel3","username3","pwd3"));
+		 */
+
+		Client u = null;
+		
+		Connection cnx=null;
+		try {
+			cnx = ConnexionBDD.getInstance().getCnx();
+			// ou Class.forName(com.mysql.jdbc.Driver.class.getName());
+
+		
+			//Requete
+			String sql = "SELECT id_client,username,password,nom,prenom,gender,date_naissance FROM client WHERE username=?;";
+			PreparedStatement ps = cnx.prepareStatement(sql);
+			ps.setString(1, username);
+			
+			
+			//Execution et traitement de la r��ponse
+			ResultSet res = ps.executeQuery();
+			
+			while(res.next()){
+				u = new Client(res.getInt("id_client"),
+					res.getString("username"),
+					res.getString("password"),
+					res.getString("nom"),
+					res.getString("prenom"),
+					res.getString("gender"),
+					res.getDate("date_naissance")		
+					);
+				break;
+			}
+			
+			res.close();
+			ConnexionBDD.getInstance().closeCnx();			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		//
+
+		return u;
+	}
+	
+	
 	public static List<Client> findAll(int start, int nbElts) {
 		/*
 		 * List<beans.Client> lu = new ArrayList<Client>(); lu.add(new

@@ -12,9 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 import beans.Client;
 import beans.Client_address;
 import dao.ClientDao;
+import dao.GestionClientBDD;
 import hibernate_beans.ClientAddress;
 import hibernate_beans.ClientAddressId;
-import controllers.GestionClientBDD;
 
 
 /**
