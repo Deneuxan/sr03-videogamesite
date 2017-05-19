@@ -21,6 +21,9 @@ public final class ConnexionForm {
     public String getResultat() {
         return resultat;
     }
+    public void setResultat(String res) {
+         this.resultat=res;
+    }
 
     public Map<String, String> getErreurs() {
         return erreurs;
@@ -50,11 +53,11 @@ public final class ConnexionForm {
         client.setPassword( motDePasse );
         
         /* Initialisation du r茅sultat global de la validation. */
-        if ( erreurs.isEmpty() ) {
-            resultat = "Succes de la connexion.";
-        } else {
+        if ( !erreurs.isEmpty() ) {
             resultat = "echec de la connexion.";
-        }
+        } /*else {
+            resultat = "echec de la connexion.";
+        }*/
 
         return client;
     }

@@ -57,6 +57,7 @@ public class Connexion extends HttpServlet {
             session.setAttribute( ATT_SESSION_USER, client );
         } else {
             session.setAttribute( ATT_SESSION_USER, null );
+            form.setResultat("echec de l'inscription.");
         }
 
         /* Stockage du formulaire et du bean dans l'objet request */

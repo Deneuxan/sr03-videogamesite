@@ -50,7 +50,7 @@
 
                 
 
-                <p class="${empty form.erreurs ? 'succes' : 'erreur'}">${form.resultat}</p>
+                 <p class="${empty form.erreurs ? 'succes' : 'erreur'}">${form.resultat}</p>
 
                 
 
@@ -61,11 +61,12 @@
                     <%-- Si l'utilisateur existe en session, alors on affiche son adresse email. --%>
 
                     <p class="succes">Vous êtes connecté(e) avec l'adresse : ${sessionScope.sessionClient.username}</p>
+                    <a href="GestionProfile?action=afficher">Afficher votre profil</a>
 
                 </c:if>
                  <c:if test="${empty sessionScope.sessionClient}">
 
-                    <p class="succes" >Vous êtes echoe a connecté(e) </p>
+                    <p class="succes" >Vous n'êtes pas encore connecté(e) </p>
 
                 </c:if>
 

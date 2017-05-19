@@ -72,6 +72,29 @@ public class ServiceJeux {
 		/*return Response.ok().entity(jeux_i.ToJSON()).build();*/
 	}
 	
+	
+	@GET
+	@Path("/test")
+	@Consumes("text/plain")
+	@Produces(MediaType.APPLICATION_JSON) 
+	public List <Jeux> getTest() throws URISyntaxException, FileNotFoundException{
+		String result = "resttest, tous les jeux";
+		return JeuxDao.findAll();
+		
+	}
+	
+	@GET
+	@Path("/test/{jeux}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response gettestJeuxInfo(@PathParam("jeux") String jeux_id) throws URISyntaxException, FileNotFoundException{
+		String result = "resttest"+jeux_id;
+		Jeux Jeux_i=JeuxDao.find(Integer.valueOf(jeux_id));
+		return Response.ok(Jeux_i).build();
+		//return Response.status(200).entity(result).build(); 
+		
+	}
+	
+	
 	@GET
 	@Path("")
 	@Consumes("application/json")
@@ -79,6 +102,21 @@ public class ServiceJeux {
 	public Response getAllJeuxInfo() throws URISyntaxException, FileNotFoundException{
 		String result = "resttest, tous les jeux";
 		List <Jeux> jeux_i=JeuxDao.findAll();
+		if (jeux_i==null)
+		{return Response.ok().entity("N'ont pas ce donne").build();}
+		/*ResponseBuilder response = Response.ok(jeux_i);
+		return response.build();*/
+		return Response.ok().entity(Jeux.ToJSONall(jeux_i)).build();
+		/*return Response.ok().entity(jeux_i.ToJSON()).build();*/
+	}
+	
+	@GET
+	@Path("/key")
+	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON) 
+	public Response getJeuxInfobykey(@QueryParam("titre") String titre, @QueryParam("type_console") String type_console) throws URISyntaxException, FileNotFoundException{
+		String result = " les jeux cherche par cle";
+		List <Jeux> jeux_i=JeuxDao.findkeyword(titre,type_console);
 		if (jeux_i==null)
 		{return Response.ok().entity("N'ont pas ce donne").build();}
 		/*ResponseBuilder response = Response.ok(jeux_i);

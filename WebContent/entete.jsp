@@ -10,7 +10,7 @@
 <body>
 
 <h1>ENTETE</h1>
-Bienvenue ${param.username}
+Bienvenue <%-- ${param.username} --%>
 <hr />
 </body>
 </html>

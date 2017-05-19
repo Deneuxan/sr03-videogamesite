@@ -14,6 +14,19 @@ public class Commande implements Serializable, Comparable<Commande>{
 	private int id_address;
 	private String address;
 	
+	public Commande() {
+		
+	}
+	
+	public Commande(int id_client, int id_commande,Date date_valide, float somme_argent, int id_address ) {
+		super();
+		this.id_client = id_client;
+		this.id_commande = id_commande;
+		this.id_address = id_address;
+		this.somme_argent = somme_argent;
+		this.date_valide = date_valide;
+		
+	}
 	
 	public int getId_client() {
 		return id_client;

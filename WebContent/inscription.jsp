@@ -49,12 +49,12 @@
 		<input type="submit" value="Valider" />
 	</form>
 	
-	 <%-- <p class="${empty form.erreurs ? 'succes' : 'erreur'}">${form.resultat}</p> --%>
+	 <p class="${empty form.erreurs ? 'succes' : 'erreur'}">${form.resultat}</p>
 	 
 	 
      <c:if test="${empty form.erreurs}">
 
-        <p >Sucess de l'inscription. </p>
+        <!-- <p >Sucess de l'inscription. </p> -->
 
     </c:if>
 

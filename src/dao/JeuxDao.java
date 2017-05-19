@@ -100,6 +100,61 @@ public static List<Jeux> findAll() {
 		return u;
 	}
 	
+	public static List<Jeux> findkeyword(String nom, String type_console) {
+		
+		List<Jeux> lu = new ArrayList<Jeux>();
+		
+		Connection cnx=null;
+		try {
+			cnx = ConnexionBDD.getInstance().getCnx();
+			// ou Class.forName(com.mysql.jdbc.Driver.class.getName());
+
+			String sql = "select id_jeux, titre, photo_jeux,type_console,tarif,nombre_libre,id_createur,description_jeux,type_livraison,a_vendre,date_publication from jeux where ";
+			if (nom !=null){
+				sql = sql + "titre like '%"+ nom +"%'";
+				if (type_console !=null)
+				{sql = sql + "and type_console='"+ type_console+"'" ;}
+			}
+			else{
+				if (type_console !=null)
+				{sql = sql + "type_console='"+ type_console+"'" ;}
+			}
+			
+			
+			PreparedStatement ps = cnx.prepareStatement(sql);
+			//Requete
+			
+			
+			//Execution et traitement de la r��ponse
+			ResultSet res = ps.executeQuery();
+			
+			while(res.next()){
+				lu.add(new Jeux(res.getInt("id_jeux"),
+						res.getString("titre"),
+						res.getString("photo_jeux"),
+						res.getString("type_console"),
+						res.getFloat("tarif"),
+						res.getInt("nombre_libre"),
+						res.getInt("id_createur"),
+						res.getString("description_jeux"),
+						res.getString("type_livraison"),
+						res.getBoolean("a_vendre"),
+						res.getDate("date_publication")		
+						));
+			}
+			
+			res.close();
+			ConnexionBDD.getInstance().closeCnx();			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		//
+
+		return lu;
+	}
+
+	
 	public static int delete(int id) {
 		int res = 0;
 		Connection cnx=null;

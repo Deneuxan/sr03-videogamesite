@@ -55,7 +55,7 @@ public static List<Client_address> findAllAddress(int id) {
 			// ou Class.forName(com.mysql.jdbc.Driver.class.getName());
 			
 			//Requete
-			String sql = "SELECT id_client,id_address,recepteur,address,code_postal,ville,pays,telephone FROM Client_address where id_client=? ;";
+			String sql = "SELECT id_client,id_address,recepteur,address,code_postal,ville,pays,telephone FROM client_address where id_client=? ;";
 			PreparedStatement ps = cnx.prepareStatement(sql);
 			ps.setInt(1,id);
 			
@@ -92,7 +92,7 @@ public static List<Client_address> findAllAddress(int id) {
 			cnx = ConnexionBDD.getInstance().getCnx();
 			
 			//Requete
-			String sql = "INSERT INTO Client_address(id_address, recepteur, address, code_postal, ville, pays, telephone) " +
+			String sql = "INSERT INTO client_address(id_address, recepteur, address, code_postal, ville, pays, telephone) " +
 					"VALUES(?,?,?,?,?,?,?)";
 			PreparedStatement ps = cnx.prepareStatement(sql);
 			ps.setInt(1, u.getId_client());
@@ -122,7 +122,7 @@ public static List<Client_address> findAllAddress(int id) {
 			cnx = ConnexionBDD.getInstance().getCnx();
 			
 			//Requete
-			String sql = "UPDATE Client_address SET recepteur=?,address=?,code_postal=?,ville=?,pays=?, telephone=? WHERE id_address=?";
+			String sql = "UPDATE client_address SET recepteur=?,address=?,code_postal=?,ville=?,pays=?, telephone=? WHERE id_address=?";
 			PreparedStatement ps = cnx.prepareStatement(sql);
 			ps.setString(1, u.getRecepteur());
 			ps.setString(2, u.getAddress());
@@ -178,21 +178,19 @@ public static List<Commande> findAllCommande(int id) {
 			// ou Class.forName(com.mysql.jdbc.Driver.class.getName());
 			
 			//Requete
-			String sql = "select id_commande,date_valide,somme_argent,address,code_postal,ville,pays from commande,client_address where client_address.id_address=commande.id_address and id_client=?;";
+			String sql = "select id_client,id_commande,date_valide,somme_argent,id_address from commande where commande.id_client=?;";
 			PreparedStatement ps = cnx.prepareStatement(sql);
+			ps.setInt(1,id);
 			
 			//Execution et traitement de la réponse
 			ResultSet res = ps.executeQuery();
 			
-			/*while(res.next()){
-				lu.add(new Commande(res.getInt("id_commande"),res.getDate("date_valide"),
-						res.getFloat("somme_argent"),
-						res.getString("address"),
-						res.getString("code_postal"),
-						res.getString("ville"),
-						res.getString("pays")	
+			while(res.next()){
+				lu.add(new Commande(res.getInt("id_client"),res.getInt("id_commande"),
+						res.getDate("date_valide"),res.getFloat("somme_argent"),
+						res.getInt("id_address")						
 				));
-			}*/
+			}
 			
 			res.close();
 			ConnexionBDD.getInstance().closeCnx();			

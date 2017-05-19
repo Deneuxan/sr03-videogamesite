@@ -53,8 +53,19 @@ public class inscription extends HttpServlet {
 			e.printStackTrace();
 		}
 		
-		 if ( form.getErreurs().isEmpty()) {  	 
-			 ClientDao.insert(client);
+		 if ( form.getErreurs().isEmpty()) { 
+			 if (ClientDao.find(client.getUsername())==null)
+				 {if(ClientDao.insert(client)>0){
+					 form.setResultat("success de l'inscription.");
+				 }
+				 else{
+					 form.setResultat("echec de l'inscription.");
+				 }	 
+			 }
+			 else {
+				 form.setResultat("il existe deja un client avec ce username");
+			 }
+			 
 	        } 
 		 request.setAttribute( ATT_FORM, form );
 		 
