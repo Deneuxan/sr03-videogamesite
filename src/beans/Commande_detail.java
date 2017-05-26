@@ -12,6 +12,14 @@ public class Commande_detail implements Serializable, Comparable<Commande_detail
 	private int id_jeux;
 	private int nombre;
 	
+	public Commande_detail(int id_commande_detail, int id_commande,int id_jeux, int nombre ) {
+		super();
+		this.id_commande_detail = id_commande_detail;
+		this.id_commande = id_commande;
+		this.id_jeux = id_jeux;
+		this.nombre = nombre;
+		
+	}
 	
 	public int getId_commande_detail() {
 		return id_commande_detail;

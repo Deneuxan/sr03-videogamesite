@@ -21,7 +21,7 @@ public static List<Jeux> findAll() {
 			// ou Class.forName(com.mysql.jdbc.Driver.class.getName());
 			
 			//Requete
-			String sql = "select id_jeux, titre, photo_jeux,type_console,tarif,nombre_libre,id_createur,description_jeux,type_livraison,a_vendre,date_publication from jeux;";
+			String sql = "select id_jeux, titre, photo_jeux,type_console,tarif,nombre_libre,id_createur,description_jeux,type_livraison,a_vendre,date_publication from jeux where a_vendre=1 order by nombre_achete desc;";
 			PreparedStatement ps = cnx.prepareStatement(sql);
 			
 			//Execution et traitement de la réponse
@@ -65,7 +65,7 @@ public static List<Jeux> findAll() {
 
 		
 			//Requete
-			String sql = "select id_jeux, titre, photo_jeux,type_console,tarif,nombre_libre,id_createur,description_jeux,type_livraison,a_vendre,date_publication from jeux where id_jeux=?";
+			String sql = "select id_jeux, titre, photo_jeux,type_console,tarif,nombre_libre,id_createur,description_jeux,type_livraison,a_vendre,date_publication from jeux where id_jeux=? and a_vendre=1";
 			PreparedStatement ps = cnx.prepareStatement(sql);
 			ps.setInt(1, id);
 			
@@ -109,7 +109,7 @@ public static List<Jeux> findAll() {
 			cnx = ConnexionBDD.getInstance().getCnx();
 			// ou Class.forName(com.mysql.jdbc.Driver.class.getName());
 
-			String sql = "select id_jeux, titre, photo_jeux,type_console,tarif,nombre_libre,id_createur,description_jeux,type_livraison,a_vendre,date_publication from jeux where ";
+			String sql = "select id_jeux, titre, photo_jeux,type_console,tarif,nombre_libre,id_createur,description_jeux,type_livraison,a_vendre,date_publication from jeux where a_vendre=1 and ";
 			if (nom !=null){
 				sql = sql + "titre like '%"+ nom +"%'";
 				if (type_console !=null)
@@ -118,9 +118,10 @@ public static List<Jeux> findAll() {
 			else{
 				if (type_console !=null)
 				{sql = sql + "type_console='"+ type_console+"'" ;}
-			}
+			}	
+			sql = sql + " order by nombre_achete desc";
 			
-			
+						
 			PreparedStatement ps = cnx.prepareStatement(sql);
 			//Requete
 			
@@ -154,7 +155,7 @@ public static List<Jeux> findAll() {
 		return lu;
 	}
 
-	
+	//////////////////////////////////////////// on ne supprime pas les jeux, parcontre on peut desactive les jeux;
 	public static int delete(int id) {
 		int res = 0;
 		Connection cnx=null;
@@ -165,6 +166,32 @@ public static List<Jeux> findAll() {
 				
 			//Requete
 			String sql = "DELETE FROM jeux WHERE id_jeux=?";
+			PreparedStatement ps = cnx.prepareStatement(sql);
+			ps.setInt(1,id);
+			
+			//Execution et traitement de la r��ponse
+			res = ps.executeUpdate();
+			
+			ConnexionBDD.getInstance().closeCnx();			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return res;
+	}
+	
+	
+	
+	public static int delete_desctive(int id) {
+		int res = 0;
+		Connection cnx=null;
+		try {
+			cnx = ConnexionBDD.getInstance().getCnx();
+			// ou Class.forName(com.umysql.jdbc.Driver.class.getName());
+
+				
+			//Requete
+			String sql = "UPDATE jeux SET a_vendre=0 WHERE id_jeux=?";
 			PreparedStatement ps = cnx.prepareStatement(sql);
 			ps.setInt(1,id);
 			

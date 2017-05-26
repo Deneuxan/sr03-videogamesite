@@ -20,7 +20,7 @@
 
         <form method="post" action="connexion">
 
-            <fieldset>
+            <fieldset align="center" height="200" width="400">
 
                 <legend>Connexion</legend>
 

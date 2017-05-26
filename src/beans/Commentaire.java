@@ -12,24 +12,25 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Commentaire implements Serializable, Comparable<Commentaire>{
 	
+	private int id_jeux;
 	private int id_client;
-	private int id_commande;
-	private int  id_address;
-	private float somme_argent;
-	private Date date_valide;
+	private float score;
+	private String  commentaire;
+	private Date date_commentaire;
+	private String username;
 	
 	public Commentaire() {
 		
 	}
 	
-	public Commentaire(int id_client, int id_commande, int id_address, float somme_argent,  Date date_valide) {
+	public Commentaire(int id_jeux, int id_client, float score, String commentaire,  Date date_commentaire, String username) {
 		super();
 		this.id_client = id_client;
-		this.id_commande = id_commande;
-		this.id_address = id_address;
-		this.somme_argent = somme_argent;
-		this.date_valide = date_valide;
-		
+		this.id_jeux = id_jeux;
+		this.score = score;
+		this.commentaire = commentaire;
+		this.date_commentaire = date_commentaire;
+		this.username = username;		
 	}
 	
 	public int getId_client() {
@@ -39,61 +40,41 @@ public class Commentaire implements Serializable, Comparable<Commentaire>{
 		this.id_client = id_client;
 	}
 	
-	public int getId_commande() {
-		return id_commande;
+	public int getId_jeux() {
+		return id_jeux;
 	}
-	public void setId_commande(int id_commande) {
-		this.id_commande = id_commande;
-	}
-	
-	public int getId_address() {
-		return id_address;
-	}
-	public void setId_address(int id_address) {
-		this.id_address = id_address;
+	public void setId_jeux(int id_jeux) {
+		this.id_jeux = id_jeux;
 	}
 	
-	public float getSomme_argent() {
-		return somme_argent;
+	public float getScore() {
+		return score;
 	}
-	public void setSomme_argent(float somme_argent) {
-		this.somme_argent = somme_argent;
-	}
-	
-	public Date getDate_valide() {
-		return date_valide;
-	}
-	public void setDate_valide(Date date_valide) {
-		this.date_valide = date_valide;
+	public void setScore(float score) {
+		this.score = score;
 	}
 	
-	public String ToJSON()
-	{
-		String jsonInString = "";
-		ObjectMapper mapper = new ObjectMapper();
-		//Object to JSON in String
-		try {
-			jsonInString = mapper.writeValueAsString(this);
-		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return jsonInString;
+	public String getCommentaire() {
+		return commentaire;
+	}
+	public void setCommentaire(String commentaire) {
+		this.commentaire = commentaire;
 	}
 	
-	static public String ToJSONall(List<Client> list){
-		String jsonInString = "";
-		ObjectMapper mapper = new ObjectMapper();
-		//Object to JSON in String
-		try {
-			jsonInString = mapper.writeValueAsString(list);
-		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return jsonInString;
-		
+	public Date getDate_commentaire() {
+		return date_commentaire;
 	}
+	public void setDate_commentaire(Date date_commentaire) {
+		this.date_commentaire = date_commentaire;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String address) {
+		this.username = username;
+	}
+	
 	
 	@Override
 	public int compareTo(Commentaire o) {

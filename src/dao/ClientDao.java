@@ -245,6 +245,49 @@ public class ClientDao {
 		return u;
 	}
 	
+	public static Client findConnection(String username, String password) {
+
+		Client u = null;
+		
+		Connection cnx=null;
+		try {
+			cnx = ConnexionBDD.getInstance().getCnx();
+			// ou Class.forName(com.mysql.jdbc.Driver.class.getName());
+
+		
+			//Requete
+			String sql = "SELECT id_client,username,password,nom,prenom,gender,date_naissance FROM client WHERE username=? and password=?;";
+			PreparedStatement ps = cnx.prepareStatement(sql);
+			ps.setString(1, username);
+			ps.setString(2, password);
+			
+			
+			//Execution et traitement de la r��ponse
+			ResultSet res = ps.executeQuery();
+			
+			while(res.next()){
+				u = new Client(res.getInt("id_client"),
+					res.getString("username"),
+					res.getString("password"),
+					res.getString("nom"),
+					res.getString("prenom"),
+					res.getString("gender"),
+					res.getDate("date_naissance")		
+					);
+				break;
+			}
+			
+			res.close();
+			ConnexionBDD.getInstance().closeCnx();			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		//
+
+		return u;
+	}
+	
 	
 	public static List<Client> findAll(int start, int nbElts) {
 		/*

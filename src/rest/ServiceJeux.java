@@ -31,7 +31,11 @@ import javax.servlet.ServletContext;
 import beans.Jeux;
 import dao.JeuxDao;
 import dao.ClientDao;
+import dao.GestionClientBDD;
+import dao.GestionJeuxBDD;
+import beans.Categorie;
 import beans.Client;
+import beans.Client_address;
 
 
 
@@ -39,19 +43,7 @@ import beans.Client;
 
 
 @Path("/jeux")
-public class ServiceJeux {
-	/*@GET
-	@Path("/{jeux}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getJeuxInfo(@PathParam("jeux") String jeux_id) throws URISyntaxException, FileNotFoundException{
-		String result = "resttest"+jeux_id;
-		Jeux Jeux_i=JeuxDao.find(Integer.valueOf(jeux_id));
-		return Response.ok(Jeux_i).build();
-		//return Response.status(200).entity(result).build(); 
-		
-	}*/
-	
-	
+public class ServiceJeux {	
 	
 	@GET
 	@Path("/{jeux}")
@@ -61,37 +53,12 @@ public class ServiceJeux {
 		String result = "resttest"+jeux_id;
 		Jeux jeux_i=JeuxDao.find(Integer.valueOf(jeux_id));
 		if (jeux_i==null)
-		{	String date="1993-01-01";
-			DateFormat format =new SimpleDateFormat("yyyy-MM-dd");
-	
-			Date d = format.parse(date);
-			return Response.ok().entity(d).build();} /*"N'ont pas ce donne"*/
+		{	
+			return Response.ok().entity("N'ont pas ce donne").build();} 
 		/*ResponseBuilder response = Response.ok(jeux_i);
 		return response.build();*/
-		return Response.ok().entity(jeux_i.ToJSON()).build();
+		return Response.ok(jeux_i).build();
 		/*return Response.ok().entity(jeux_i.ToJSON()).build();*/
-	}
-	
-	
-	@GET
-	@Path("/test")
-	@Consumes("text/plain")
-	@Produces(MediaType.APPLICATION_JSON) 
-	public List <Jeux> getTest() throws URISyntaxException, FileNotFoundException{
-		String result = "resttest, tous les jeux";
-		return JeuxDao.findAll();
-		
-	}
-	
-	@GET
-	@Path("/test/{jeux}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response gettestJeuxInfo(@PathParam("jeux") String jeux_id) throws URISyntaxException, FileNotFoundException{
-		String result = "resttest"+jeux_id;
-		Jeux Jeux_i=JeuxDao.find(Integer.valueOf(jeux_id));
-		return Response.ok(Jeux_i).build();
-		//return Response.status(200).entity(result).build(); 
-		
 	}
 	
 	
@@ -106,7 +73,7 @@ public class ServiceJeux {
 		{return Response.ok().entity("N'ont pas ce donne").build();}
 		/*ResponseBuilder response = Response.ok(jeux_i);
 		return response.build();*/
-		return Response.ok().entity(Jeux.ToJSONall(jeux_i)).build();
+		return Response.ok(jeux_i).build();
 		/*return Response.ok().entity(jeux_i.ToJSON()).build();*/
 	}
 	
@@ -117,11 +84,11 @@ public class ServiceJeux {
 	public Response getJeuxInfobykey(@QueryParam("titre") String titre, @QueryParam("type_console") String type_console) throws URISyntaxException, FileNotFoundException{
 		String result = " les jeux cherche par cle";
 		List <Jeux> jeux_i=JeuxDao.findkeyword(titre,type_console);
-		if (jeux_i==null)
+		if (jeux_i==null || jeux_i.isEmpty())
 		{return Response.ok().entity("N'ont pas ce donne").build();}
 		/*ResponseBuilder response = Response.ok(jeux_i);
 		return response.build();*/
-		return Response.ok().entity(Jeux.ToJSONall(jeux_i)).build();
+		return Response.ok(jeux_i).build();
 		/*return Response.ok().entity(jeux_i.ToJSON()).build();*/
 	}
 		
@@ -131,7 +98,7 @@ public class ServiceJeux {
 	public Response deleteUser(@PathParam("jeux") String jeux_id){
 		System.out.println("deleting"+jeux_id);
 		String res="";
-		if (JeuxDao.delete(Integer.valueOf(jeux_id))>0){
+		if (JeuxDao.delete_desctive(Integer.valueOf(jeux_id))>0){// use delete_desctive to replace delete
 			res = "Delete succeed";}
 		else{
 			res = "Delete fail";
@@ -198,44 +165,42 @@ public class ServiceJeux {
                     .build();
         }
 	}
-		
-		/*Client client_i=ClientDao.find(Integer.valueOf(client_id));*/
-		
-		/*if (jeux_id.equals("all") || jeux_id.equals("*")){
-			List <Client> client_i=ClientDao.findAll();
-			ResponseBuilder response = Response.ok(client_i);
-			return response.build();
-			
-			return Response.ok().entity(Client.ToJSONall(client_i)).build();
-			
-		}*/
-		
-		/*System.out.println(jeux_i.getNom());*/
-		/*return Response.ok().entity(client_i.ToJSON()).build();*/
-		
-		//return client_i;
-		/*return Response.ok(client_i).build();*/
-		/*return Response.ok().entity(client_i).build();*/
-		/*return Response.status(200).entity(result).build(); */
-		
 	
 	
-	/*@GET
-	@Path("/{client}")
+	@GET
+	@Path("/categorie")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getAllClientInfo(@PathParam("client") "all") throws URISyntaxException, FileNotFoundException{
-		String result = "resttest";
-		Client client_i=ClientDao.find(Integer.valueOf(client_id));
-		List <Client> client_i=ClientDao.findAll();
-		
-		
-		return Response.ok().entity(Client.ToJSONall(client_i)).build();
-		//return client_i;
-		return Response.ok(client_i).build();
-		return Response.ok().entity(client_i).build();
-		return Response.status(200).entity(result).build(); 
+	public Response getAllCategorie() throws URISyntaxException, FileNotFoundException{
+		List <Categorie> categorie=GestionJeuxBDD.findAllCategorie();
+		if (categorie==null || categorie.isEmpty())
+		{return Response.ok().entity("N'ont pas ce donne").build();}
+		return Response.ok(categorie).build();
 		
 	}
-*/
+	
+	@GET
+	@Path("/categorie/{categorie}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getCategorie(@PathParam("categorie") String id_categorie) throws URISyntaxException, FileNotFoundException{
+		Categorie categorie=GestionJeuxBDD.findCategorie(Integer.valueOf(id_categorie));
+		if (categorie==null)
+		{	return null;} 		
+		return Response.ok(categorie).build();
+		
+	}
+	
+	@GET
+	@Path("/categorie/jeux")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getJeuxCategorie(@QueryParam("categorie") String id_categorie) throws URISyntaxException, FileNotFoundException{
+		List <Jeux> categorie=GestionJeuxBDD.findCategorieAllJeux(Integer.valueOf(id_categorie));
+		if (categorie==null || categorie.isEmpty())
+		{return Response.ok().entity("N'ont pas ce donne").build();}
+		return Response.ok(categorie).build();
+		
+	}
+	
+		
+	
 }
 

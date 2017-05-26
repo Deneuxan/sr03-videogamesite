@@ -113,7 +113,7 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jersey-common.jar">
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jersey-common.jar" sourcepath="C:/Users/xieyi/.m2/repository/org/glassfish/jersey/core/jersey-common/2.5/jersey-common-2.5-sources.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
@@ -128,7 +128,7 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jersey-server.jar">
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jersey-server.jar" sourcepath="C:/Users/xieyi/.m2/repository/org/glassfish/jersey/core/jersey-server/2.5/jersey-server-2.5-sources.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
@@ -143,7 +143,7 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/mysql-connector-java-5.1.41-bin.jar">
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/mysql-connector-java-5.1.41-bin.jar" sourcepath="WebContent/WEB-INF/lib/mysql-connector-java-5.1.41-bin.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
@@ -178,6 +178,10 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jackson-all-1.9.0.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jackson-all-1.9.0.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

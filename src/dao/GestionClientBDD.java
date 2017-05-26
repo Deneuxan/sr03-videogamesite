@@ -19,6 +19,7 @@ import java.util.Properties;
 import beans.Client;
 import beans.Client_address;
 import beans.Commande;
+import beans.Commande_detail;
 import hibernate_beans.ClientAddress;
 import hibernate_beans.ClientAddressId;
 /*import org.hibernate.SessionFactory;
@@ -83,6 +84,48 @@ public static List<Client_address> findAllAddress(int id) {
 
 		return lu;
 	}
+
+	
+public static Client_address findAddress(int client_id, int adresse_id) {
+	
+	Client_address lu = null;
+	Connection cnx=null;
+	try {
+		cnx = ConnexionBDD.getInstance().getCnx();
+		// ou Class.forName(com.mysql.jdbc.Driver.class.getName());
+		
+		//Requete
+		String sql = "SELECT id_client,id_address,recepteur,address,code_postal,ville,pays,telephone FROM client_address where id_client=? and id_address=?;";
+		PreparedStatement ps = cnx.prepareStatement(sql);
+		ps.setInt(1,client_id);
+		ps.setInt(2,adresse_id);
+		
+		//Execution et traitement de la réponse
+		ResultSet res = ps.executeQuery();
+		
+		while(res.next()){
+			lu = new Client_address(res.getInt("id_client"),res.getInt("id_address"),
+					res.getString("recepteur"),
+					res.getString("address"),
+					res.getString("code_postal"),
+					res.getString("ville"),
+					res.getString("pays"),
+					res.getString("telephone")		
+			);
+			break;
+		}
+		
+		res.close();
+		ConnexionBDD.getInstance().closeCnx();			
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
+
+	//
+
+	return lu;
+}
+
 	
 	public static int insertAddress(Client_address u) {
 		int res = 0;
@@ -92,7 +135,7 @@ public static List<Client_address> findAllAddress(int id) {
 			cnx = ConnexionBDD.getInstance().getCnx();
 			
 			//Requete
-			String sql = "INSERT INTO client_address(id_address, recepteur, address, code_postal, ville, pays, telephone) " +
+			String sql = "INSERT INTO client_address(id_client, recepteur, address, code_postal, ville, pays, telephone) " +
 					"VALUES(?,?,?,?,?,?,?)";
 			PreparedStatement ps = cnx.prepareStatement(sql);
 			ps.setInt(1, u.getId_client());
@@ -122,7 +165,7 @@ public static List<Client_address> findAllAddress(int id) {
 			cnx = ConnexionBDD.getInstance().getCnx();
 			
 			//Requete
-			String sql = "UPDATE client_address SET recepteur=?,address=?,code_postal=?,ville=?,pays=?, telephone=? WHERE id_address=?";
+			String sql = "UPDATE client_address SET recepteur=?,address=?,code_postal=?,ville=?,pays=?, telephone=? WHERE id_address=? and id_client=?";
 			PreparedStatement ps = cnx.prepareStatement(sql);
 			ps.setString(1, u.getRecepteur());
 			ps.setString(2, u.getAddress());
@@ -131,6 +174,7 @@ public static List<Client_address> findAllAddress(int id) {
 			ps.setString(5, u.getPays());
 			ps.setString(6, u.getTelephone());
 			ps.setInt(7, u.getId_address());
+			ps.setInt(8, u.getId_client());
 			
 			//Execution et traitement de la r��ponse
 			res = ps.executeUpdate();
@@ -143,7 +187,7 @@ public static List<Client_address> findAllAddress(int id) {
 		return res;
 	}
 	
-	public static int deleteAddress(int id) {
+	public static int deleteAddress(int client_id, int adresse_id) {
 		int res = 0;
 		Connection cnx=null;
 		try {
@@ -152,9 +196,10 @@ public static List<Client_address> findAllAddress(int id) {
 
 				
 			//Requete
-			String sql = "DELETE FROM Client_address WHERE id_address=?";
+			String sql = "DELETE FROM client_address WHERE id_address=? and id_client=?;";
 			PreparedStatement ps = cnx.prepareStatement(sql);
-			ps.setInt(1,id);
+			ps.setInt(1,adresse_id);
+			ps.setInt(2,client_id);
 			
 			//Execution et traitement de la r��ponse
 			res = ps.executeUpdate();
@@ -178,7 +223,7 @@ public static List<Commande> findAllCommande(int id) {
 			// ou Class.forName(com.mysql.jdbc.Driver.class.getName());
 			
 			//Requete
-			String sql = "select id_client,id_commande,date_valide,somme_argent,id_address from commande where commande.id_client=?;";
+			String sql = "select id_client,id_commande,date_valide,somme_argent,address from commande where commande.id_client=?;";
 			PreparedStatement ps = cnx.prepareStatement(sql);
 			ps.setInt(1,id);
 			
@@ -188,7 +233,7 @@ public static List<Commande> findAllCommande(int id) {
 			while(res.next()){
 				lu.add(new Commande(res.getInt("id_client"),res.getInt("id_commande"),
 						res.getDate("date_valide"),res.getFloat("somme_argent"),
-						res.getInt("id_address")						
+						res.getString("address")						
 				));
 			}
 			
@@ -202,8 +247,270 @@ public static List<Commande> findAllCommande(int id) {
 
 		return lu;
 	}
+
+
+public static Commande findCommande(int id_client, int id_commande) {
 	
+	Commande lu = null;
+	Connection cnx=null;
+	try {
+		cnx = ConnexionBDD.getInstance().getCnx();
+		// ou Class.forName(com.mysql.jdbc.Driver.class.getName());
+		
+		//Requete
+		String sql = "select id_client,id_commande,date_valide,somme_argent,address from commande where commande.id_client=? and id_commande=?;";
+		PreparedStatement ps = cnx.prepareStatement(sql);
+		ps.setInt(1,id_client);
+		ps.setInt(2,id_commande);
+		
+		//Execution et traitement de la réponse
+		ResultSet res = ps.executeQuery();
+		
+		while(res.next()){
+			lu = new Commande(res.getInt("id_client"),res.getInt("id_commande"),
+					res.getDate("date_valide"),res.getFloat("somme_argent"),
+					res.getString("address")						
+			);
+		}
+		
+		res.close();
+		ConnexionBDD.getInstance().closeCnx();			
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
+
+	//
+
+	return lu;
+}
+
+
+
+public static int insertCommande(Commande u) {
+	int res = 0;
 	
+	Connection cnx=null;
+	try {
+		cnx = ConnexionBDD.getInstance().getCnx();
+		
+		//Requete
+		String sql = "INSERT INTO commande(id_client,somme_argent,address) " +
+				"VALUES(?,?,?)";
+		PreparedStatement ps = cnx.prepareStatement(sql);
+		ps.setInt(1, u.getId_client());
+		ps.setFloat(2, u.getSomme_argent());
+		ps.setString(3, u.getAddress());
+		//Execution et traitement de la r��ponse
+		res = ps.executeUpdate();
+		
+		ConnexionBDD.getInstance().closeCnx();			
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
+
+	return res;
+
+}
+
+
+
+
+public static List<Commande_detail> findAllCommande_detail(int id) {
 	
+	List<Commande_detail> lu = new ArrayList<Commande_detail>();
+	Connection cnx=null;
+	try {
+		cnx = ConnexionBDD.getInstance().getCnx();
+		// ou Class.forName(com.mysql.jdbc.Driver.class.getName());
+		
+		//Requete
+		String sql = "select id_commande_detail,id_jeux, nombre from commande_detail where id_commande=?;";
+		PreparedStatement ps = cnx.prepareStatement(sql);
+		ps.setInt(1,id);
+		
+		//Execution et traitement de la réponse
+		ResultSet res = ps.executeQuery();
+		
+		while(res.next()){
+			lu.add(new Commande_detail(res.getInt("id_commande_detail"),id ,res.getInt("id_jeux"),
+					res.getInt("nombre")						
+			));
+		}
+		
+		res.close();
+		ConnexionBDD.getInstance().closeCnx();			
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
+
+	//
+
+	return lu;
+}
+
+public static Commande_detail findCommande_detail(int id_commande, int id_commande_detail) {
+	
+	Commande_detail lu = null;
+	Connection cnx=null;
+	try {
+		cnx = ConnexionBDD.getInstance().getCnx();
+		// ou Class.forName(com.mysql.jdbc.Driver.class.getName());
+		
+		//Requete
+		String sql = "select id_commande_detail,id_jeux, nombre from commande_detail where id_commande=? and id_commande_detail=? ;";
+		PreparedStatement ps = cnx.prepareStatement(sql);
+		ps.setInt(1,id_commande);
+		ps.setInt(2,id_commande_detail);
+		
+		ResultSet res = ps.executeQuery();
+		
+		while(res.next()){
+			lu = new Commande_detail(res.getInt("id_commande_detail"),id_commande ,res.getInt("id_jeux"),
+					res.getInt("nombre")						
+			);
+		}
+		
+		res.close();
+		ConnexionBDD.getInstance().closeCnx();			
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
+
+	//
+
+	return lu;
+}
+
+public static int insertCommande_detail(Commande_detail u) {
+	int res = 0;
+	
+	Connection cnx=null;
+	try {
+		cnx = ConnexionBDD.getInstance().getCnx();
+		
+		//Requete
+		String sql = "INSERT INTO commande_detail (id_commande, id_jeux, nombre) " +
+				"VALUES(?,?,?)";
+		PreparedStatement ps = cnx.prepareStatement(sql);
+		ps.setInt(1, u.getId_commande());
+		ps.setInt(2, u.getId_jeux());
+		ps.setInt(3, u.getNombre());
+		res = ps.executeUpdate();
+		
+		ConnexionBDD.getInstance().closeCnx();			
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
+
+	return res;
+}
+
+public static int deleteCommande_detail(int id_commande, int id_commande_detail) {
+	int res = 0;
+	Connection cnx=null;
+	try {
+		cnx = ConnexionBDD.getInstance().getCnx();
+		// ou Class.forName(com.umysql.jdbc.Driver.class.getName());
+
+			
+		//Requete
+		String sql = "DELETE FROM commande_detail WHERE id_commande=? and id_commande_detail=?;";
+		PreparedStatement ps = cnx.prepareStatement(sql);
+		ps.setInt(1,id_commande);
+		ps.setInt(2,id_commande_detail);
+
+		//Execution et traitement de la r��ponse
+		res = ps.executeUpdate();
+		
+		ConnexionBDD.getInstance().closeCnx();			
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
+
+	return res;
+}
+
+public static int deleteAllCommande_detail(int id_commande) {
+	int res = 0;
+	Connection cnx=null;
+	try {
+		cnx = ConnexionBDD.getInstance().getCnx();
+		// ou Class.forName(com.umysql.jdbc.Driver.class.getName());
+
+			
+		//Requete
+		String sql = "DELETE FROM commande_detail WHERE id_commande=?;";
+		PreparedStatement ps = cnx.prepareStatement(sql);
+		ps.setInt(1,id_commande);
+
+		//Execution et traitement de la r��ponse
+		res = ps.executeUpdate();
+		
+		ConnexionBDD.getInstance().closeCnx();			
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
+
+	return res;
+}
+
+
+
+
+
+public static int deleteCommande(int id_commande) {
+	int res = 0;
+	Connection cnx=null;
+	try {
+		cnx = ConnexionBDD.getInstance().getCnx();
+		// ou Class.forName(com.umysql.jdbc.Driver.class.getName());
+
+			
+		//Requete
+		String sql = "DELETE FROM commande WHERE id_commande=?;";
+		PreparedStatement ps = cnx.prepareStatement(sql);
+		ps.setInt(1,id_commande);
+
+		//Execution et traitement de la r��ponse
+		res = ps.executeUpdate();
+		
+		ConnexionBDD.getInstance().closeCnx();			
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
+
+	return res;
+}
+
+
+public static int findCommande_Enligne_Jeux(int id_commande) {
+	int result=0;
+	Connection cnx=null;
+	try {
+		cnx = ConnexionBDD.getInstance().getCnx();
+		// ou Class.forName(com.mysql.jdbc.Driver.class.getName());
+		
+		//Requete
+		String sql = "select count(*) as number from commande,commande_detail,jeux  where commande.id_commande=commande_detail.id_commande and commande_detail.id_jeux=jeux.id_jeux and jeux.type_livraison=?;";
+		PreparedStatement ps = cnx.prepareStatement(sql);
+		ps.setString(1,"enligne");
+		
+		ResultSet res = ps.executeQuery();
+		
+		while(res.next()){
+			result =res.getInt("number");
+		}
+		
+		res.close();
+		ConnexionBDD.getInstance().closeCnx();			
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
+
+	//
+
+	return result;
+}
+
 
 }

@@ -21,6 +21,7 @@ public class Jeux implements Serializable, Comparable<Jeux>{
 	private String type_livraison;
 	private boolean a_vendre;
 	private Date date_publication;
+	private int nombre_achete;
 	
 	public Jeux() {
 		
@@ -117,6 +118,13 @@ public class Jeux implements Serializable, Comparable<Jeux>{
 	}
 	public void setDate_publication(Date date_publication) {
 		this.date_publication = date_publication;
+	}
+	
+	public int getNombre_achete() {
+		return nombre_achete;
+	}
+	public void setNombre_achete(int nombre_achete) {
+		this.nombre_achete = nombre_achete;
 	}
 	
 	public String ToJSON()
