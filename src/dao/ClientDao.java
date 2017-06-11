@@ -104,14 +104,13 @@ public class ClientDao {
 			cnx = ConnexionBDD.getInstance().getCnx();
 			
 			//Requete
-			String sql = "UPDATE client SET password=?,nom=?,prenom=?,gender=?,date_naissance=? WHERE id_client=?";
+			String sql = "UPDATE client SET nom=?,prenom=?,gender=?,date_naissance=? WHERE id_client=?";
 			PreparedStatement ps = cnx.prepareStatement(sql);
-			ps.setString(1, u.getPassword());
-			ps.setString(2, u.getNom());
-			ps.setString(3, u.getPrenom());
-			ps.setString(4, u.getGender());			
-			ps.setDate(5, new java.sql.Date(u.getDate_naissance().getTime()));
-			ps.setInt(6, u.getId_client());
+			ps.setString(1, u.getNom());
+			ps.setString(2, u.getPrenom());
+			ps.setString(3, u.getGender());			
+			ps.setDate(4, new java.sql.Date(u.getDate_naissance().getTime()));
+			ps.setInt(5, u.getId_client());
 			
 			//Execution et traitement de la r��ponse
 			res = ps.executeUpdate();

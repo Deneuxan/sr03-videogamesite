@@ -98,7 +98,7 @@
 				<td><%=com.getId_client()%></td>
 				<td><%=com.getId_commande()%></td>
 				<td><%=com.getSomme_argent()%></td>
-				<td><%=com.getId_address()%></td>
+				<%-- <td><%=com.getId_address()%></td> --%>
 			
 			</tr>
 	<%

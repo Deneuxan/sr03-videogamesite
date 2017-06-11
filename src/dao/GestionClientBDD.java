@@ -18,8 +18,10 @@ import java.util.Properties;
 
 import beans.Client;
 import beans.Client_address;
+import beans.Command_jeux_union;
 import beans.Commande;
 import beans.Commande_detail;
+import beans.Jeux;
 import hibernate_beans.ClientAddress;
 import hibernate_beans.ClientAddressId;
 /*import org.hibernate.SessionFactory;
@@ -223,7 +225,7 @@ public static List<Commande> findAllCommande(int id) {
 			// ou Class.forName(com.mysql.jdbc.Driver.class.getName());
 			
 			//Requete
-			String sql = "select id_client,id_commande,date_valide,somme_argent,address from commande where commande.id_client=?;";
+			String sql = "select id_client,id_commande,date_valide,somme_argent,address,somme_jeux from commande where commande.id_client=?;";
 			PreparedStatement ps = cnx.prepareStatement(sql);
 			ps.setInt(1,id);
 			
@@ -233,7 +235,7 @@ public static List<Commande> findAllCommande(int id) {
 			while(res.next()){
 				lu.add(new Commande(res.getInt("id_client"),res.getInt("id_commande"),
 						res.getDate("date_valide"),res.getFloat("somme_argent"),
-						res.getString("address")						
+						res.getString("address"), res.getInt("somme_jeux")						
 				));
 			}
 			
@@ -258,7 +260,7 @@ public static Commande findCommande(int id_client, int id_commande) {
 		// ou Class.forName(com.mysql.jdbc.Driver.class.getName());
 		
 		//Requete
-		String sql = "select id_client,id_commande,date_valide,somme_argent,address from commande where commande.id_client=? and id_commande=?;";
+		String sql = "select id_client,id_commande,date_valide,somme_argent,address,somme_jeux from commande where commande.id_client=? and id_commande=?;";
 		PreparedStatement ps = cnx.prepareStatement(sql);
 		ps.setInt(1,id_client);
 		ps.setInt(2,id_commande);
@@ -269,7 +271,7 @@ public static Commande findCommande(int id_client, int id_commande) {
 		while(res.next()){
 			lu = new Commande(res.getInt("id_client"),res.getInt("id_commande"),
 					res.getDate("date_valide"),res.getFloat("somme_argent"),
-					res.getString("address")						
+					res.getString("address"), res.getInt("somme_jeux")						
 			);
 		}
 		
@@ -294,12 +296,13 @@ public static int insertCommande(Commande u) {
 		cnx = ConnexionBDD.getInstance().getCnx();
 		
 		//Requete
-		String sql = "INSERT INTO commande(id_client,somme_argent,address) " +
-				"VALUES(?,?,?)";
+		String sql = "INSERT INTO commande(id_client,somme_argent,address, somme_jeux) " +
+				"VALUES(?,?,?,?)";
 		PreparedStatement ps = cnx.prepareStatement(sql);
 		ps.setInt(1, u.getId_client());
 		ps.setFloat(2, u.getSomme_argent());
 		ps.setString(3, u.getAddress());
+		ps.setInt(4, u.getSomme_jeux());
 		//Execution et traitement de la r��ponse
 		res = ps.executeUpdate();
 		
@@ -510,6 +513,42 @@ public static int findCommande_Enligne_Jeux(int id_commande) {
 	//
 
 	return result;
+}
+
+public static List<Command_jeux_union> findAllCommande_detail_jeux(int id) {
+	
+	List<Command_jeux_union> lu = new ArrayList<Command_jeux_union>();
+	
+	Connection cnx=null;
+	try {
+		cnx = ConnexionBDD.getInstance().getCnx();
+		// ou Class.forName(com.mysql.jdbc.Driver.class.getName());
+		
+		//Requete
+		String sql = "select commande_detail.id_commande,id_commande_detail,commande_detail.id_jeux,nombre,titre, photo_jeux,type_console,tarif from commande_detail,jeux,commande where commande_detail.id_jeux=jeux.id_jeux and commande.id_commande=commande_detail.id_commande and id_client=?;";
+		PreparedStatement ps = cnx.prepareStatement(sql);
+		ps.setInt(1,id);
+		
+		//Execution et traitement de la réponse
+		ResultSet res = ps.executeQuery();
+				
+		while(res.next()){
+			lu.add( new Command_jeux_union(res.getInt("id_commande_detail"),id ,res.getInt("id_jeux"),
+					res.getInt("nombre"),
+					res.getString("titre"),
+					res.getString("photo_jeux"),
+					res.getFloat("tarif")	
+					));
+		}		
+		res.close();
+		ConnexionBDD.getInstance().closeCnx();			
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
+
+	//
+
+	return lu;
 }
 
 

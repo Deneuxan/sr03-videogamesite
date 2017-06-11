@@ -23,7 +23,5 @@
     <url-pattern>/rest/*</url-pattern>
   </servlet-mapping>
 </web-app>
-
-
 <!-- jersey.config.server.provider.packages -->
 <!-- rest; dao; beans -->

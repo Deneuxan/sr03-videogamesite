@@ -30,6 +30,7 @@ import dao.JeuxDao;
 import dao.ClientDao;
 import beans.Client;
 import beans.Client_address;
+import beans.Command_jeux_union;
 import beans.Commande;
 import beans.Commande_detail;
 import dao.GestionClientBDD;
@@ -56,6 +57,20 @@ public class ServiceClient {
 	}
 	
 	@GET
+	@Path("/login")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getClientInfo(@QueryParam("username") String username, @QueryParam("password") String password) throws URISyntaxException, FileNotFoundException{
+		/*Client client_i=ClientDao.find(Integer.valueOf(client_id));*/
+		Client client_i=ClientDao.findConnection(username, password);
+		if (client_i==null)
+		{	
+			return null;}
+		return Response.ok(client_i).build();
+		
+	}
+	
+	
+	@GET
 	@Path("")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getClientInfo() throws URISyntaxException, FileNotFoundException{
@@ -73,32 +88,36 @@ public class ServiceClient {
 	public Response createClient(@QueryParam("username") String username, @QueryParam("password") String password ,@QueryParam("name") String name,@QueryParam("firstname") String firstname, @QueryParam("gender") String gender, @QueryParam("birthdate") String date) {
              
         if ( ClientDao.find(username) != null) {
-          return Response
-            .status(Status.NO_CONTENT)
-            .build();
+          return null;
         }
         
+        if(gender.equals(""))
+        { gender =null;}
         
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date d = null;
-		try {
-			d = format.parse(date);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        
+        if (!date.equals("") || date==null)
+        {
+	        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			try {
+				d = format.parse(date);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
 //        Date temp = Date.valueOf(date);
 //        java.util.Date utilDate = new java.util.Date(temp.getTime());
 //        
         //int id_client, String username, String password, String nom, String prenom, String gender, Date date_naissance
         Client newClient = new Client(0, username, password, name, firstname, gender, d);
-           
+          
         
         String res="";
 		if (ClientDao.insert(newClient)>0){
 			res = "Add succeed";}
 		else{
-			res = "Add fail";
+			return null;
 		}
 
         return Response
@@ -109,7 +128,7 @@ public class ServiceClient {
 	
 	@PUT // Méthode HTTP utilisée pour déclencher cette méthode
 	@Path("/update")
-    public Response updateClient(@QueryParam("username") String username, @QueryParam("password") String password ,@QueryParam("name") String name,@QueryParam("firstname") String firstname, @QueryParam("gender") String gender, @QueryParam("birthdate") String date) throws Exception {
+    public Response updateClient(@QueryParam("username") String username,@QueryParam("name") String name,@QueryParam("firstname") String firstname, @QueryParam("gender") String gender, @QueryParam("birthdate") String date) throws Exception {
              
 		Client current = ClientDao.find(username);
         if ( current == null) {
@@ -132,21 +151,21 @@ public class ServiceClient {
 
     		current.setNom(name);
     		current.setDate_naissance(d);
-    		current.setPassword(password);
+    		/*current.setPassword(password);*/
     		current.setGender(gender);
     		current.setPrenom(firstname);
     		
     		String res="";
     		if (ClientDao.update(current)>0){
-    			res = "Update succeed, ID client:" + String.valueOf(current.getId_client());}
+    			res = "Update succeed, ID client:" + String.valueOf(current.getId_client());
+    			return Response
+                        .status(Status.OK)
+                        .entity(res)
+                        .build();}
     		else{
-    			res = "Update fail, ID client:" + String.valueOf(current.getId_client());
+    			return null;
     		}
             
-            return Response
-                    .status(Status.OK)
-                    .entity(res)
-                    .build();
         }
 	}
     //////////////////////////////////////////////////////////////////////////////// on n'a pas besoins de supprimer un client   
@@ -285,17 +304,18 @@ public class ServiceClient {
     	@Path("/commande/{client}")
     	@Produces(MediaType.APPLICATION_JSON)
     	public Response getClientCommand(@PathParam("client") String id_client) throws URISyntaxException, FileNotFoundException{    		
-    		List <Commande> client_command=GestionClientBDD.findAllCommande(Integer.valueOf(id_client));			
-    		return Response.ok(client_command).build();
-    		
+    		List <Commande> client_command=GestionClientBDD.findAllCommande(Integer.valueOf(id_client));
+    		if (client_command==null || client_command.isEmpty())
+    		{return null;}
+    		return Response.ok(client_command).build(); 		
     	}
     	
     	@POST // Méthode HTTP utilisée pour déclencher cette méthode
     	@Path("/commande/create")
     	/*http://localhost:8080/SR03/rest/client/create?username=testqwq@123.com&password=asdkhfbsuif&name=hehe&firstname=haha&gender=H&birthdate=1990-01-01*/    
-    	public Response createCommand(@QueryParam("client") String id_client, @QueryParam("somme_argent") String somme_argent ,@QueryParam("address") String address) {
+    	public Response createCommand(@QueryParam("client") String id_client, @QueryParam("somme_argent") String somme_argent ,@QueryParam("address") String address, @QueryParam("nbjeux") String nbjeux) {
                  
-    		Commande newCommande = new Commande(Integer.valueOf(id_client),0, null, Float.valueOf(somme_argent), address);
+    		Commande newCommande = new Commande(Integer.valueOf(id_client),0, null, Float.valueOf(somme_argent), address, Integer.valueOf(nbjeux));
                           
             String res="";
     		if (GestionClientBDD.insertCommande(newCommande)>0){
@@ -341,6 +361,17 @@ public class ServiceClient {
     	@Produces(MediaType.APPLICATION_JSON)
     	public Response getCommandDetail(@PathParam("commande") String id_command) throws URISyntaxException, FileNotFoundException{    		
     		List <Commande_detail> command_detail=GestionClientBDD.findAllCommande_detail(Integer.valueOf(id_command));			
+    		return Response.ok(command_detail).build();
+    		
+    	}
+    	
+    	@GET
+    	@Path("/commande/detailjeux/{client}")
+    	@Produces(MediaType.APPLICATION_JSON)
+    	public Response getCommandDetailJeux(@PathParam("client") String id_client) throws URISyntaxException, FileNotFoundException{    		
+    		List <Command_jeux_union> command_detail=GestionClientBDD.findAllCommande_detail_jeux(Integer.valueOf(id_client));			
+    		if (command_detail==null || command_detail.isEmpty())
+    		{return null;}
     		return Response.ok(command_detail).build();
     		
     	}

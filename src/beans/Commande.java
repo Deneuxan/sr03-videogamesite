@@ -12,18 +12,20 @@ public class Commande implements Serializable, Comparable<Commande>{
 	private Date date_valide;
 	private float somme_argent;
 	private String address;
+	private int somme_jeux;
 	
 	public Commande() {
 		
 	}
 	
-	public Commande(int id_client, int id_commande,Date date_valide, float somme_argent, String address ) {
+	public Commande(int id_client, int id_commande,Date date_valide, float somme_argent, String address, int somme_jeux ) {
 		super();
 		this.id_client = id_client;
 		this.id_commande = id_commande;
 		this.address = address;
 		this.somme_argent = somme_argent;
 		this.date_valide = date_valide;
+		this.somme_jeux = somme_jeux;
 		
 	}
 	
@@ -61,6 +63,13 @@ public class Commande implements Serializable, Comparable<Commande>{
 	}
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	
+	public int getSomme_jeux() {
+		return somme_jeux;
+	}
+	public void setSomme_jeux(int somme_jeux) {
+		this.somme_jeux = somme_jeux;
 	}
 
 	
