@@ -36,6 +36,7 @@ import dao.GestionJeuxBDD;
 import beans.Categorie;
 import beans.Client;
 import beans.Client_address;
+import beans.Createur;
 
 
 
@@ -200,6 +201,16 @@ public class ServiceJeux {
 		
 	}
 	
+	@GET
+	@Path("/createur/{createur}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getCreateur(@PathParam("createur") String id_createur) throws URISyntaxException, FileNotFoundException{
+		Createur createur=GestionJeuxBDD.findCreateur(Integer.valueOf(id_createur));
+		if (createur==null)
+		{	return null;} 		
+		return Response.ok(createur).build();
+		
+	}
 		
 	
 }

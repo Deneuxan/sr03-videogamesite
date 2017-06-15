@@ -234,7 +234,7 @@ public static Createur findCreateur(int id) {
 		while(res.next()){
 			u = new Createur(res.getInt("id_createur"),
 					res.getString("nom"),
-					res.getString("description_createurfrom")	
+					res.getString("description_createur")	
 					);
 			break;
 		}
